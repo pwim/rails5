@@ -1,0 +1,25 @@
+version: "2"
+services:
+  database:
+    image: convox/postgres
+    ports:
+    - 5432/tcp
+    volumes:
+    - /var/lib/postgresql/data
+  web:
+    build:
+      context: .
+    command: bin/rails server -p $$PORT -e $$RAILS_ENV -b 0.0.0.0
+    environment:
+    - PORT=4001
+    - RAILS_ENV=production
+    - RACK_ENV=production
+    - SECRET_KEY_BASE=e0f481a3160bdb78689fb3195da18ec0db950463e14c2f8c4b31d4beea755cd70908e4ceb71987ae89d75868a1ceba0d6b3ae71c7863f32307132a489e7da293
+    - RAILS_SERVE_STATIC_FILES=enabled
+    - RAILS_LOG_TO_STDOUT=enabled
+    - LANG=en_US.UTF-8
+    links:
+    - database
+    ports:
+    - 80:4001/tcp
+    - 443:4001/tcp
